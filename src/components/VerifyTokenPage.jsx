@@ -11,8 +11,9 @@ const VerifyTokenPage = () => {
     e.preventDefault();
 
     try {
+      const apiUrl = process.env.REACT_APP_API_URL
       // Enviar una solicitud POST con el email y el token
-      const response = await fetch('http://localhost:4000/api/verify-token', {
+      const response = await fetch(`${apiUrl}/api/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, token }),

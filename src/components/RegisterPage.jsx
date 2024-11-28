@@ -22,7 +22,8 @@ const RegisterPage = () => {
 
     try {
       // Hacemos la solicitud POST al backend
-      const response = await axios.post('http://localhost:4000/api/register', {
+      const apiUrl = process.env.REACT_APP_API_URL
+      const response = await axios.post(`${apiUrl}/api/register`, {
         name,
         email,
         password,
