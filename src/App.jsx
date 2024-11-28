@@ -8,11 +8,11 @@ const App = () => {
   return (
     <Router>
       <Routes> {/* Reemplazamos Switch por Routes */}
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/" element={<RegisterPage />} />
         <Route path="/verify-token" element={<VerifyTokenPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/" element={<LoginPage />} /> {/* Ruta por defecto */}
+        <Route path="/register" element={<RegisterPage />} /> {/* Ruta por defecto */}
       </Routes>
     </Router>
   );
