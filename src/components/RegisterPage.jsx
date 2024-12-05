@@ -22,8 +22,8 @@ const RegisterPage = () => {
 
     try {
       // Hacemos la solicitud POST al backend
-      const apiUrl = process.env.REACT_APP_API_URL
-      const response = await axios.post(`${apiUrl}/api/register`, {
+      const apiUrl = import.meta.env.VITE_API_URL
+      const response = await axios.post(`${apiUrl}/register`, {
         name,
         email,
         password,
@@ -42,6 +42,7 @@ const RegisterPage = () => {
     } catch (err) {
       // Si ocurre un error, mostramos un mensaje de error
       setError(err.response?.data?.message || 'Hubo un error al registrar el usuario.');
+      console.log(err)
     }
   };
 
