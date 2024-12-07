@@ -11,6 +11,9 @@ const RegisterPage = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate(); // Inicializamos useNavigate para redirigir
 
+  console.log(import.meta.env.VITE_API_URL); // Debe imprimir la URL correcta
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
