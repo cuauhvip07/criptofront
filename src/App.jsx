@@ -3,6 +3,7 @@ import VerifyTokenPage from './components/VerifyTokenPage';
 import RegisterPage from './components/RegisterPage';
 import LoginPage from './components/LoginPage';
 import DashboardPage from './components/DashboardPage';
+import PublicKeyDisplay from './components/PublicKeyDisplay';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/register" element={<RegisterPage />} /> {/* Ruta por defecto */}
+        <Route path="/llave-publica" element={<PublicKeyDisplay/>} />
       </Routes>
     </Router>
   );

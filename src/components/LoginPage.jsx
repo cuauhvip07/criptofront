@@ -1,52 +1,62 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const LoginPage = () => {
-  const navigate = useNavigate(); // Usamos useNavigate
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (email === 'user@example.com' && password === 'password') {
-      // Redirige al dashboard si las credenciales son correctas
-      navigate('/dashboard');
-    } else {
-      setError('Correo o contraseña incorrectos.');
+    try {
+      const url = import.meta.env.VITE_API_URL
+      const response = await fetch(`${url}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Error en el login');
+      }
+
+      // Almacenar el token en localStorage
+      localStorage.setItem('authToken', data.token);
+
+      setMessage('Inicio de sesión exitoso');
+      // Redirigir o mostrar contenido después del login
+      window.location.href = '/dashboard';  // Esto es solo un ejemplo
+    } catch (error) {
+      setMessage('Error al iniciar sesión: ' + error.message);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-5 border rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-center mb-6">Iniciar sesión</h2>
-      {error && <p className="text-red-500 text-center">{error}</p>}
+    <div>
+      <h2>Iniciar sesión</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Correo</label>
-          <input 
-            type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            required
-            className="w-full p-2 mt-1 border rounded-md"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Contraseña</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required
-            className="w-full p-2 mt-1 border rounded-md"
-          />
-        </div>
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded-md">Iniciar sesión</button>
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Iniciar sesión</button>
       </form>
+      {message && <p>{message}</p>}
     </div>
   );
 };
 
-export default LoginPage;
+export default Login;

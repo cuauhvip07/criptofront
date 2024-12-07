@@ -14,6 +14,10 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Limpiar los mensajes previos antes de enviar la solicitud
+    setError('');
+    setMessage('');
+
     // Validación de las contraseñas
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden.");
@@ -22,7 +26,7 @@ const RegisterPage = () => {
 
     try {
       // Hacemos la solicitud POST al backend
-      const apiUrl = import.meta.env.VITE_API_URL
+      const apiUrl = import.meta.env.VITE_API_URL; // Asegúrate de que esta variable esté definida
       const response = await axios.post(`${apiUrl}/register`, {
         name,
         email,
@@ -41,16 +45,20 @@ const RegisterPage = () => {
       }
     } catch (err) {
       // Si ocurre un error, mostramos un mensaje de error
-      setError(err.response?.data?.message || 'Hubo un error al registrar el usuario.');
-      console.log(err)
+      const errorMessage = err.response?.data?.message || 'Hubo un error al registrar el usuario.';
+      setError(errorMessage);
+      console.error('Error en el registro:', err); // Para depuración
     }
   };
 
   return (
     <div className="max-w-md mx-auto mt-10 p-5 border rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold text-center mb-6">Registrarse</h2>
+      
+      {/* Mostrar mensajes de error y éxito */}
       {error && <p className="text-red-500 text-center">{error}</p>}
       {message && <p className="text-green-500 text-center">{message}</p>}
+      
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">Nombre</label>

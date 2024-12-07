@@ -6,14 +6,16 @@ const VerifyTokenPage = () => {
   const [token, setToken] = useState('');
   const [email, setEmail] = useState(''); // Asumimos que el email también será ingresado
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Estado de carga
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Activar estado de carga
 
     try {
-      const apiUrl = process.env.REACT_APP_API_URL
-      // Enviar una solicitud POST con el email y el token
-      const response = await fetch(`${apiUrl}/api/register`, {
+      const apiUrl = import.meta.env.VITE_API_URL; // Asegúrate de que esté configurado correctamente
+      // Enviar la solicitud POST con el email y el token
+      const response = await fetch(`${apiUrl}/verify-token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, token }),
@@ -22,6 +24,9 @@ const VerifyTokenPage = () => {
       const data = await response.json();
 
       if (data.success) {
+        // Guardar el token JWT en el localStorage
+        localStorage.setItem('authToken', data.token);
+
         // Redirigir al dashboard si el token es válido
         navigate('/dashboard');
       } else {
@@ -32,6 +37,8 @@ const VerifyTokenPage = () => {
       // Mostrar error si la solicitud falla
       console.error('Error de red:', err);
       setError('Hubo un problema al verificar el token. Intente nuevamente.');
+    } finally {
+      setLoading(false); // Desactivar estado de carga
     }
   };
 
@@ -62,7 +69,13 @@ const VerifyTokenPage = () => {
             placeholder="Ingresa el token"
           />
         </div>
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded-md">Verificar Token</button>
+        <button 
+          type="submit" 
+          className="w-full bg-blue-500 text-white p-2 rounded-md" 
+          disabled={loading} // Deshabilitar durante la carga
+        >
+          {loading ? 'Verificando...' : 'Verificar Token'}
+        </button>
       </form>
     </div>
   );
